@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Meu Blog Pessoal</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --primary-color: #14345b;
@@ -15,6 +16,19 @@
             --bg-color: #f4efe8;
             --card-bg: #fffdf9;
             --border-color: rgba(20, 52, 91, 0.08);
+            --success-color: #03863a;
+        }
+
+        html.dark-mode {
+            --primary-color: #e8f1f5;
+            --secondary-color: #f5a76a;
+            --hover-color: #ffb380;
+            --accent-color: #2a3f52;
+            --text-color: #e8e8e8;
+            --text-light: #b0b0b0;
+            --bg-color: #1a1a1a;
+            --card-bg: #2a2a2a;
+            --border-color: rgba(232, 241, 245, 0.1);
         }
 
         * {
@@ -28,6 +42,135 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             line-height: 1.6;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        /* Navegação */
+        nav {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 0.75rem 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(20, 52, 91, 0.05);
+        }
+
+        .nav-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .nav-brand {
+            font-weight: 700;
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-size: 1.2rem;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-menu a:hover {
+            color: var(--secondary-color);
+        }
+
+        .nav-controls {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .search-box {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .search-input {
+            padding: 0.5rem 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 999px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            width: 150px;
+            transition: width 0.3s ease;
+        }
+
+        .search-input:focus {
+            outline: none;
+            width: 200px;
+            border-color: var(--secondary-color);
+        }
+
+        .search-btn, .theme-toggle, .menu-toggle {
+            background: none;
+            border: none;
+            color: var(--secondary-color);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+
+        .search-btn:hover, .theme-toggle:hover, .menu-toggle:hover {
+            color: var(--hover-color);
+            transform: scale(1.1);
+        }
+
+        .menu-toggle {
+            display: none;
+            font-size: 1.3rem;
+        }
+
+        @media (max-width: 768px) {
+            .nav-menu {
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--card-bg);
+                flex-direction: column;
+                gap: 0;
+                padding: 1rem;
+                display: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+
+            .nav-menu.active {
+                display: flex;
+            }
+
+            .nav-menu a {
+                padding: 0.5rem 0;
+                display: block;
+            }
+
+            .menu-toggle {
+                display: block;
+            }
+
+            .search-input {
+                width: 120px;
+            }
+
+            .search-input:focus {
+                width: 150px;
+            }
         }
 
         header {
@@ -107,6 +250,45 @@
             background: #ffd894;
         }
 
+        /* Filtro de tags */
+        .tags-filter {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 22px;
+            border: 1px solid var(--border-color);
+            margin-bottom: 1.5rem;
+            box-shadow: 0 18px 40px rgba(20, 52, 91, 0.08);
+        }
+
+        .tags-filter h3 {
+            margin: 0 0 1rem;
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .tags-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+
+        .tag-btn {
+            padding: 0.4rem 0.85rem;
+            border: 1px solid var(--border-color);
+            background: var(--bg-color);
+            color: var(--text-color);
+            border-radius: 999px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.3s ease;
+        }
+
+        .tag-btn:hover, .tag-btn.active {
+            background: var(--secondary-color);
+            color: #fff;
+            border-color: var(--secondary-color);
+        }
+
         .container {
             max-width: 1100px;
             margin: -1.5rem auto 0;
@@ -130,6 +312,24 @@
             border-radius: 22px;
             box-shadow: 0 18px 40px rgba(20, 52, 91, 0.08);
             overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .post-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(20, 52, 91, 0.12);
         }
 
         .post-card.featured {
@@ -167,6 +367,14 @@
             font-size: 0.9rem;
         }
 
+        .reading-time {
+            color: var(--text-light);
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
         .category {
             display: inline-flex;
             align-items: center;
@@ -180,6 +388,30 @@
             text-transform: uppercase;
         }
 
+        .post-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            margin: 0.75rem 0;
+        }
+
+        .post-tag {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.2rem 0.5rem;
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            border-radius: 999px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .post-tag:hover {
+            background: var(--secondary-color);
+            color: #fff;
+        }
+
         .extra-content {
             display: none;
             margin-top: 1rem;
@@ -190,21 +422,230 @@
             display: block;
         }
 
-        .read-more {
-            display: inline-block;
+        .post-actions {
+            display: flex;
+            gap: 0.75rem;
             margin-top: 1rem;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .read-more, .share-btn, .like-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
             padding: 0.7rem 1rem;
             background-color: var(--secondary-color);
             color: #fff;
             border: 0;
             border-radius: 999px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: all 0.3s ease;
             font-weight: 700;
+            font-size: 0.9rem;
         }
 
-        .read-more:hover {
+        .read-more:hover, .share-btn:hover, .like-btn:hover {
             background-color: var(--hover-color);
+        }
+
+        .like-btn {
+            background-color: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .like-btn:hover {
+            background-color: rgba(184, 81, 12, 0.1);
+            border-color: var(--hover-color);
+            color: var(--hover-color);
+        }
+
+        .like-btn.liked {
+            background-color: #ff4757;
+            color: #fff;
+            border-color: #ff4757;
+        }
+
+        .like-btn.liked:hover {
+            background-color: #ff6b7a;
+            border-color: #ff6b7a;
+        }
+
+        .like-counter {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.85rem;
+            margin-left: 0.5rem;
+            padding: 0.3rem 0.6rem;
+            background: var(--accent-color);
+            border-radius: 999px;
+            color: var(--secondary-color);
+            font-weight: 600;
+        }
+
+        .like-btn.liked .like-counter {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+        }
+
+        /* Animação do coração */
+        @keyframes heartBeat {
+            0% {
+                transform: scale(1);
+            }
+            25% {
+                transform: scale(1.3);
+            }
+            50% {
+                transform: scale(1.1);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .like-btn.animate {
+            animation: heartBeat 0.6s ease-in-out;
+        }
+
+        .heart-icon {
+            display: inline-block;
+            font-size: 1.2rem;
+        }
+
+        .share-menu {
+            display: none;
+            position: absolute;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 0.5rem;
+            gap: 0.5rem;
+            flex-direction: column;
+            z-index: 100;
+            min-width: 150px;
+        }
+
+        .share-menu.show {
+            display: flex;
+        }
+
+        .share-menu a {
+            padding: 0.5rem 0.75rem;
+            text-decoration: none;
+            color: var(--text-color);
+            font-size: 0.9rem;
+            border-radius: 8px;
+            transition: background 0.3s ease;
+        }
+
+        .share-menu a:hover {
+            background: var(--accent-color);
+        }
+
+        .post-comments {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .comments-section h4 {
+            margin: 0 0 1rem;
+            color: var(--primary-color);
+        }
+
+        .comment-form {
+            display: grid;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: var(--accent-color);
+            border-radius: 16px;
+            border: 1px solid var(--border-color);
+        }
+
+        .comment-form input, .comment-form textarea {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            background: var(--bg-color);
+            color: var(--text-color);
+            font-family: inherit;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .comment-form input:focus, .comment-form textarea:focus {
+            outline: none;
+            border-color: var(--secondary-color);
+            box-shadow: 0 0 0 3px rgba(184, 81, 12, 0.1);
+        }
+
+        .comment-submit {
+            padding: 0.7rem 1rem;
+            background: var(--secondary-color);
+            color: #fff;
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+            align-self: flex-start;
+            font-size: 0.95rem;
+        }
+
+        .comment-submit:hover {
+            background: var(--hover-color);
+            transform: translateY(-2px);
+        }
+
+        .comment-submit:active {
+            transform: translateY(0);
+        }
+
+        .comments-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: grid;
+            gap: 1rem;
+        }
+
+        .comment-item {
+            padding: 1rem;
+            background: var(--bg-color);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            animation: fadeInUp 0.4s ease-out;
+            transition: all 0.3s ease;
+        }
+
+        .comment-item:hover {
+            border-color: var(--secondary-color);
+            box-shadow: 0 4px 12px rgba(184, 81, 12, 0.1);
+        }
+
+        .comment-author {
+            font-weight: 700;
+            color: var(--secondary-color);
+            margin-bottom: 0.3rem;
+            font-size: 0.95rem;
+        }
+
+        .comment-date {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-bottom: 0.5rem;
+        }
+
+        .comment-text {
+            margin: 0;
+            line-height: 1.6;
+            word-break: break-word;
         }
 
         aside {
@@ -215,7 +656,7 @@
             box-shadow: 0 18px 40px rgba(20, 52, 91, 0.08);
             height: fit-content;
             position: sticky;
-            top: 1.25rem;
+            top: 70px;
         }
 
         aside h3 {
@@ -235,6 +676,30 @@
             margin-bottom: 1rem;
         }
 
+        .social-links {
+            display: flex;
+            gap: 0.75rem;
+            margin: 1rem 0;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: var(--secondary-color);
+            color: #fff;
+            border-radius: 50%;
+            text-decoration: none;
+            transition: background 0.3s ease, transform 0.2s ease;
+        }
+
+        .social-links a:hover {
+            background: var(--hover-color);
+            transform: scale(1.1);
+        }
+
         .recipe-list {
             margin: 0;
             padding-left: 1.1rem;
@@ -244,12 +709,81 @@
             margin-bottom: 0.4rem;
         }
 
+        /* Newsletter */
+        .newsletter-box {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: #fff;
+            padding: 1.5rem;
+            border-radius: 16px;
+            margin: 1.5rem 0;
+        }
+
+        .newsletter-box h4 {
+            margin: 0 0 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .newsletter-box p {
+            margin: 0 0 1rem;
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        .newsletter-form {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .newsletter-form input {
+            padding: 0.7rem 0.75rem;
+            border: none;
+            border-radius: 999px;
+            font-size: 0.9rem;
+        }
+
+        .newsletter-form input:focus {
+            outline: none;
+        }
+
+        .newsletter-btn {
+            padding: 0.7rem 1rem;
+            background: #fff;
+            color: var(--secondary-color);
+            border: none;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+
+        .newsletter-btn:hover {
+            transform: scale(1.02);
+        }
+
+        .newsletter-success {
+            background: var(--success-color);
+            color: #fff;
+            padding: 0.75rem 1rem;
+            border-radius: 8px;
+            margin-top: 0.75rem;
+            display: none;
+        }
+
         footer {
             text-align: center;
             padding: 1.5rem;
             background-color: var(--primary-color);
             color: #fff;
             margin-top: 3rem;
+        }
+
+        footer a {
+            color: var(--secondary-color);
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
         }
 
         @media (max-width: 768px) {
@@ -267,10 +801,50 @@
             aside {
                 position: static;
             }
+
+            .search-input {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+
+            .search-input:focus {
+                width: 100%;
+            }
+
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
         }
     </style>
 </head>
 <body>
+
+    <!-- Navegação -->
+    <nav>
+        <div class="nav-container">
+            <a href="#" class="nav-brand">📝 Blog José</a>
+            <button class="menu-toggle" id="menuToggle">
+                <i class="fas fa-bars"></i>
+            </button>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#posts">Posts</a></li>
+                <li><a href="#sobre">Sobre</a></li>
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <div class="nav-controls">
+                <div class="search-box">
+                    <input type="text" class="search-input" id="searchInput" placeholder="Buscar posts...">
+                    <button class="search-btn" id="searchBtn">
+                        <i class="fas fa-search"></i>
+                    </button>
+                </div>
+                <button class="theme-toggle" id="themeToggle" title="Alternar tema">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
 
     <header>
         <div class="topbar">
@@ -291,76 +865,535 @@
 
     <main class="container">
         <section class="main-content">
-            <article class="post-card featured">
+            <!-- Filtro de Tags -->
+            <div class="tags-filter">
+                <h3>Filtrar por categoria:</h3>
+                <div class="tags-list" id="tagsFilter">
+                    <button class="tag-btn active" data-tag="todas">Todas</button>
+                    <button class="tag-btn" data-tag="receita">Receita</button>
+                    <button class="tag-btn" data-tag="diário">Diário</button>
+                    <button class="tag-btn" data-tag="estudos">Estudos</button>
+                    <button class="tag-btn" data-tag="tecnologia">Tecnologia</button>
+                </div>
+            </div>
+
+            <!-- Posts -->
+            <article class="post-card featured" data-category="receita">
                 <img class="post-cover" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pudim_de_leite_%283544235183%29.jpg" alt="Pudim de leite caramelizado" loading="lazy">
                 <div class="post-body">
                     <span class="category">Receita</span>
                     <h2>Receita de pudim clássico</h2>
                     <div class="meta-row">
                         <time class="date" datetime="2026-06-22">22 de Junho de 2026</time>
+                        <span class="reading-time"><i class="fas fa-clock"></i> 3 min de leitura</span>
+                    </div>
+                    <div class="post-tags">
+                        <span class="post-tag" data-tag="culinária">culinária</span>
+                        <span class="post-tag" data-tag="dessert">dessert</span>
+                        <span class="post-tag" data-tag="fácil">fácil</span>
                     </div>
                     <p>Hoje o blog ganhou um post com cara de comida boa: um pudim clássico, cremoso e com calda dourada. É uma receita simples, com poucos ingredientes e perfeita para um almoço de família.</p>
                     <p class="extra-content">Ingredientes: 1 lata de leite condensado, 2 medidas da lata de leite, 3 ovos e 1 xícara de açúcar para a calda. Modo de preparo: derreta o açúcar até virar caramelo, espalhe na forma, bata os ingredientes no liquidificador, despeje na forma caramelizada e asse em banho-maria até firmar. Depois é só gelar e desenformar.</p>
-                    <button type="button" class="read-more">Ler mais</button>
+                    <div class="post-actions">
+                        <button type="button" class="like-btn" onclick="toggleLike(this)" data-post-id="pudim">
+                            <span class="heart-icon">🤍</span>
+                            <span class="like-counter"><span class="like-count">0</span></span>
+                        </button>
+                        <button type="button" class="read-more">
+                            <i class="fas fa-book"></i> Ler mais
+                        </button>
+                        <div style="position: relative;">
+                            <button type="button" class="share-btn" onclick="toggleShare(this)">
+                                <i class="fas fa-share-alt"></i> Compartilhar
+                            </button>
+                            <div class="share-menu">
+                                <a href="https://www.facebook.com/sharer/sharer.php?u=yoururl" target="_blank">
+                                    <i class="fab fa-facebook"></i> Facebook
+                                </a>
+                                <a href="https://twitter.com/intent/tweet?url=yoururl" target="_blank">
+                                    <i class="fab fa-twitter"></i> Twitter
+                                </a>
+                                <a href="https://www.linkedin.com/sharing/share-offsite/?url=yoururl" target="_blank">
+                                    <i class="fab fa-linkedin"></i> LinkedIn￼￼
+￼
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="post-comments">
+                        <div class="comments-section">
+                            <h4>💬 Comentários (<span class="comment-count">2</span>)</h4>
+                            <form class="comment-form" onsubmit="addComment(event, this)">
+                                <input type="text" placeholder="Seu nome" class="comment-name" required>
+                                <input type="email" placeholder="Seu email (não será publicado)" class="comment-email" required>
+                                <textarea placeholder="Seu comentário..." rows="3" class="comment-text" required></textarea>
+                                <button type="submit" class="comment-submit">📤 Enviar Comentário</button>
+                            </form>
+                            <ul class="comments-list">
+                                <li class="comment-item">
+                                    <div class="comment-author">👤 Maria Silva</div>
+                                    <div class="comment-date">📅 21 de Julho de 2026</div>
+                                    <p class="comment-text">Que receita deliciosa! Vou tentar fazer este fim de semana.</p>
+                                </li>
+                                <li class="comment-item">
+                                    <div class="comment-author">👤 João Santos</div>
+                                    <div class="comment-date">📅 20 de Julho de 2026</div>
+                                    <p class="comment-text">Perfeito! Ficou igualzinho que aprendi com minha avó.</p>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </article>
 
-            <article class="post-card">
+            <article class="post-card" data-category="diário">
                 <h2>Minha primeira postagem no blog</h2>
                 <div class="meta-row">
                     <span class="category">Diário</span>
                     <time class="date" datetime="2026-06-15">15 de Junho de 2026</time>
+                    <span class="reading-time"><i class="fas fa-clock"></i> 2 min de leitura</span>
+                </div>
+                <div class="post-tags">
+                    <span class="post-tag" data-tag="início">início</span>
+                    <span class="post-tag" data-tag="pessoal">pessoal</span>
                 </div>
                 <p>Olá! Este é o primeiro post do meu espaço na internet. Estou muito animado para começar a compartilhar minhas experiências, códigos e ideias com vocês. Sejam muito bem-vindos!</p>
                 <p class="extra-content">Aqui eu posso contar mais sobre como nasceu a ideia do blog, quais temas vou trazer e como pretendo usar este espaço para registrar minha evolução.</p>
-                <button type="button" class="read-more">Ler mais</button>
+                <div class="post-actions">
+                    <button type="button" class="like-btn" onclick="toggleLike(this)" data-post-id="primeira-postagem">
+                        <span class="heart-icon">🤍</span>
+                        <span class="like-counter"><span class="like-count">0</span></span>
+                    </button>
+                    <button type="button" class="read-more">
+                        <i class="fas fa-book"></i> Ler mais
+                    </button>
+                    <div style="position: relative;">
+                        <button type="button" class="share-btn" onclick="toggleShare(this)">
+                            <i class="fas fa-share-alt"></i> Compartilhar
+                        </button>
+                        <div class="share-menu">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=yoururl" target="_blank">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url=yoururl" target="_blank">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=yoururl" target="_blank">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </article>
 
-            <article class="post-card">
+            <article class="post-card" data-category="estudos">
                 <h2>Dicas para organizar a rotina de estudos</h2>
                 <div class="meta-row">
                     <span class="category">Estudos</span>
                     <time class="date" datetime="2026-06-10">10 de Junho de 2026</time>
+                    <span class="reading-time"><i class="fas fa-clock"></i> 4 min de leitura</span>
+                </div>
+                <div class="post-tags">
+                    <span class="post-tag" data-tag="produtividade">produtividade</span>
+                    <span class="post-tag" data-tag="organização">organização</span>
+                    <span class="post-tag" data-tag="dicas">dicas</span>
                 </div>
                 <p>Aprender algo novo exige disciplina e foco. Hoje vou compartilhar algumas estratégias práticas que têm me ajudado a manter a consistência nos estudos, sem surtar no processo.</p>
                 <p class="extra-content">Uma boa rotina começa com metas pequenas, pausas curtas e um plano realista. O segredo é manter a constância sem tentar fazer tudo de uma vez.</p>
-                <button type="button" class="read-more">Ler mais</button>
+                <div class="post-actions">
+                    <button type="button" class="like-btn" onclick="toggleLike(this)" data-post-id="dicas-estudos">
+                        <span class="heart-icon">🤍</span>
+                        <span class="like-counter"><span class="like-count">0</span></span>
+                    </button>
+                    <button type="button" class="read-more">
+                        <i class="fas fa-book"></i> Ler mais
+                    </button>
+                    <div style="position: relative;">
+                        <button type="button" class="share-btn" onclick="toggleShare(this)">
+                            <i class="fas fa-share-alt"></i> Compartilhar
+                        </button>
+                        <div class="share-menu">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=yoururl" target="_blank">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url=yoururl" target="_blank">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=yoururl" target="_blank">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <article class="post-card" data-category="tecnologia">
+                <h2>Primeiros passos em desenvolvimento web</h2>
+                <div class="meta-row">
+                    <span class="category">Tecnologia</span>
+                    <time class="date" datetime="2026-06-05">05 de Junho de 2026</time>
+                    <span class="reading-time"><i class="fas fa-clock"></i> 5 min de leitura</span>
+                </div>
+                <div class="post-tags">
+                    <span class="post-tag" data-tag="web">web</span>
+                    <span class="post-tag" data-tag="coding">coding</span>
+                    <span class="post-tag" data-tag="aprenda">aprenda</span>
+                </div>
+                <p>Começar uma jornada em desenvolvimento web pode parecer intimidador, mas com os recursos certos e uma boa atitude, você consegue! Vou compartilhar minha experiência e as ferramentas que me ajudaram.</p>
+                <p class="extra-content">HTML, CSS e JavaScript são a base. Não tente aprender tudo de uma vez. Comece com HTML, ganhe consistência, depois adicione CSS e depois JavaScript. Praticar é o segredo do sucesso!</p>
+                <div class="post-actions">
+                    <button type="button" class="like-btn" onclick="toggleLike(this)" data-post-id="web-dev">
+                        <span class="heart-icon">🤍</span>
+                        <span class="like-counter"><span class="like-count">0</span></span>
+                    </button>
+                    <button type="button" class="read-more">
+                        <i class="fas fa-book"></i> Ler mais
+                    </button>
+                    <div style="position: relative;">
+                        <button type="button" class="share-btn" onclick="toggleShare(this)">
+                            <i class="fas fa-share-alt"></i> Compartilhar
+                        </button>
+                        <div class="share-menu">
+                            <a href="https://www.facebook.com/sharer/sharer.php?u=yoururl" target="_blank">
+                                <i class="fab fa-facebook"></i> Facebook
+                            </a>
+                            <a href="https://twitter.com/intent/tweet?url=yoururl" target="_blank">
+                                <i class="fab fa-twitter"></i> Twitter
+                            </a>
+                            <a href="https://www.linkedin.com/sharing/share-offsite/?url=yoururl" target="_blank">
+                                <i class="fab fa-linkedin"></i> LinkedIn
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </article>
         </section>
 
         <aside>
             <h3>Sobre mim</h3>
             <div class="about-box">
-                <p>Olá! Sou um entusiasta de tecnologia, conteúdo digital e também de receitas simples que rendem boas histórias.</p>
+                <p>Olá! Sou um entusiasta de tecnologia, conteúdo digital, de 15 anos de idade e também de entusiastas dereceitas simples que rendem boas histórias.</p>
             </div>
+
+            <h3>Siga-me nas redes</h3>
+            <div class="social-links">
+                <a href="https://github.com" target="_blank" title="GitHub">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="https://twitter.com" target="_blank" title="Twitter">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://linkedin.com" target="_blank" title="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" title="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+            </div>
+
+            <div class="newsletter-box">
+                <h4>📧 Newsletter</h4>
+                <p>Receba novos posts e dicas por email!</p>
+                <form class="newsletter-form" onsubmit="subscribeNewsletter(event)">
+                    <input type="email" placeholder="Seu email" required>
+                    <button type="submit" class="newsletter-btn">Inscrever</button>
+                    <div class="newsletter-success" style="display: none;">✓ Inscrição realizada!</div>
+                </form>
+            </div>
+
             <h3>O que você encontra aqui</h3>
             <ul class="recipe-list">
                 <li>Posts pessoais</li>
                 <li>Dicas de estudo</li>
                 <li>Receitas caseiras</li>
+                <li>Artigos de tecnologia</li>
+                <li>Reflexões e diários</li>
             </ul>
         </aside>
     </main>
 
     <footer>
-        <p>&copy; 2026 Meu Blog Pessoal. Desenvolvido com HTML, CSS e JS.</p>
+        <p>&copy; 2026 Meu Blog Pessoal. Desenvolvido com <span style="color: var(--secondary-color);">❤️</span> usando HTML, CSS e JavaScript.</p>
+        <p><a href="#topo">Voltar ao topo</a> | <a href="mailto:contato@blog.com">Contato</a></p>
     </footer>
 
     <script>
+        // ============ LIKES COM CORAÇÕES ============
+        
+        // Salvar/carregar likes do localStorage
+        function getLikes() {
+            const saved = localStorage.getItem('blog-likes');
+            return saved ? JSON.parse(saved) : {};
+        }
+
+        function saveLikes(likes) {
+            localStorage.setItem('blog-likes', JSON.stringify(likes));
+        }
+
+        // Carregar likes ao abrir página
+        function loadLikes() {
+            const likes = getLikes();
+            
+            document.querySelectorAll('.like-btn').forEach(btn => {
+                const postId = btn.dataset.postId;
+                const count = likes[postId] || 0;
+                const liked = btn.classList.contains('liked');
+                
+                // Restaurar estado
+                if (count > 0) {
+                    btn.querySelector('.like-count').textContent = count;
+                }
+                
+                // Se temos dados no localStorage, marcar como liked se count > 0
+                if (likes[postId] && likes[postId] > 0) {
+                    btn.classList.add('liked');
+                    btn.querySelector('.heart-icon').textContent = '❤️';
+                }
+            });
+        }
+
+        // Toggle Like
+        function toggleLike(button) {
+            const postId = button.dataset.postId;
+            const likes = getLikes();
+            const currentCount = parseInt(button.querySelector('.like-count').textContent) || 0;
+            const isLiked = button.classList.contains('liked');
+
+            if (isLiked) {
+                // Remover like
+                button.classList.remove('liked');
+                button.querySelector('.heart-icon').textContent = '🤍';
+                button.querySelector('.like-count').textContent = Math.max(0, currentCount - 1);
+                likes[postId] = Math.max(0, currentCount - 1);
+            } else {
+                // Adicionar like
+                button.classList.add('liked');
+                button.classList.add('animate');
+                button.querySelector('.heart-icon').textContent = '❤️';
+                const newCount = currentCount + 1;
+                button.querySelector('.like-count').textContent = newCount;
+                likes[postId] = newCount;
+
+                // Remover animação após terminar
+                setTimeout(() => {
+                    button.classList.remove('animate');
+                }, 600);
+            }
+
+            // Salvar no localStorage
+            saveLikes(likes);
+        }
+
+        // Carregar likes quando a página carrega
+        document.addEventListener('DOMContentLoaded', loadLikes);
+
+        // ============ MODO ESCURO/CLARO ============
+        const themeToggle = document.getElementById('themeToggle');
+        const htmlElement = document.documentElement;
+
+        // Verificar preferência salva
+        if (localStorage.getItem('theme') === 'dark') {
+            htmlElement.classList.add('dark-mode');
+            themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+        }
+
+        themeToggle.addEventListener('click', () => {
+            htmlElement.classList.toggle('dark-mode');
+            if (htmlElement.classList.contains('dark-mode')) {
+                localStorage.setItem('theme', 'dark');
+                themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+            } else {
+                localStorage.setItem('theme', 'light');
+                themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+            }
+        });
+
+        // Menu Toggle Mobile
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navMenu');
+
+        menuToggle.addEventListener('click', () => {
+            navMenu.classList.toggle('active');
+        });
+
+        // Busca de Posts
+        const searchInput = document.getElementById('searchInput');
+        const searchBtn = document.getElementById('searchBtn');
+
+        function searchPosts() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const posts = document.querySelectorAll('article.post-card');
+
+            posts.forEach(post => {
+                const title = post.querySelector('h2').textContent.toLowerCase();
+                const content = post.textContent.toLowerCase();
+
+                if (title.includes(searchTerm) || content.includes(searchTerm) || searchTerm === '') {
+                    post.style.display = 'block';
+                    post.style.animation = 'fadeInUp 0.3s ease-out';
+                } else {
+                    post.style.display = 'none';
+                }
+            });
+        }
+
+        searchBtn.addEventListener('click', searchPosts);
+        searchInput.addEventListener('keyup', searchPosts);
+
+        // Filtro de Tags
+        const tagButtons = document.querySelectorAll('.tag-btn');
+        const posts = document.querySelectorAll('article.post-card');
+
+        tagButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // Remove active de todos
+                tagButtons.forEach(btn => btn.classList.remove('active'));
+                // Adiciona active ao clicado
+                button.classList.add('active');
+
+                const selectedTag = button.dataset.tag;
+
+                posts.forEach(post => {
+                    const postCategory = post.dataset.category;
+
+                    if (selectedTag === 'todas' || postCategory === selectedTag) {
+                        post.style.display = 'block';
+                        post.style.animation = 'fadeInUp 0.3s ease-out';
+                    } else {
+                        post.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Ler Mais / Ler Menos
         document.addEventListener('DOMContentLoaded', function () {
             const buttons = document.querySelectorAll('.read-more');
 
             buttons.forEach(function (button) {
-                button.addEventListener('click', function () {
+                button.addEventListener('click', function (e) {
+                    e.preventDefault();
                     const article = button.closest('article');
                     const extraContent = article.querySelector('.extra-content');
                     const isVisible = extraContent.classList.toggle('show');
 
-                    button.textContent = isVisible ? 'Ler menos' : 'Ler mais';
+                    button.innerHTML = isVisible ? 
+                        '<i class="fas fa-compress"></i> Ler menos' : 
+                        '<i class="fas fa-book"></i> Ler mais';
                 });
+            });
+        });
+
+        // Compartilhamento
+        function toggleShare(button) {
+            const shareMenu = button.nextElementSibling;
+            shareMenu.classList.toggle('show');
+        }
+
+        // Fechar menu de compartilhamento ao clicar fora
+        document.addEventListener('click', (e) => {
+            if (!e.target.closest('.share-btn') && !e.target.closest('.share-menu')) {
+                document.querySelectorAll('.share-menu').forEach(menu => {
+                    menu.classList.remove('show');
+                });
+            }
+        });
+
+        // Adicionar Comentário
+        function addComment(event, form) {
+            event.preventDefault();
+
+            const nameInput = form.querySelector('.comment-name');
+            const emailInput = form.querySelector('.comment-email');
+            const textInput = form.querySelector('.comment-text');
+            const name = nameInput.value.trim();
+            const email = emailInput.value.trim();
+            const text = textInput.value.trim();
+
+            // Validar
+            if (!name || !email || !text) {
+                alert('Por favor, preencha todos os campos!');
+                return;
+            }
+
+            const commentsList = form.nextElementSibling;
+            const today = new Date();
+            const dateStr = today.toLocaleDateString('pt-BR');
+
+            const newComment = document.createElement('li');
+            newComment.className = 'comment-item';
+            newComment.innerHTML = `
+                <div class="comment-author">👤 ${name}</div>
+                <div class="comment-date">📅 ${dateStr}</div>
+                <p class="comment-text">${text.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</p>
+            `;
+
+            commentsList.appendChild(newComment);
+
+            // Limpar formulário
+            form.reset();
+
+            // Atualizar contador
+            const section = form.closest('.comments-section');
+            const count = section.querySelectorAll('.comment-item').length;
+            const countSpan = section.querySelector('.comment-count');
+            if (countSpan) {
+                countSpan.textContent = count;
+            }
+
+            // Mostrar mensagem de sucesso
+            const submitBtn = form.querySelector('.comment-submit');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = '✅ Comentário enviado!';
+            submitBtn.style.background = 'var(--success-color)';
+            
+            setTimeout(() => {
+                submitBtn.textContent = originalText;
+                submitBtn.style.background = '';
+            }, 2000);
+
+            // Scroll para o novo comentário
+            newComment.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+
+        // Newsletter
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const form = event.target;
+            const email = form.querySelector('input[type="email"]').value;
+            const successMessage = form.querySelector('.newsletter-success');
+
+            // Simular inscrição
+            form.reset();
+            successMessage.style.display = 'block';
+
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000);
+        }
+
+        // Scroll suave para links âncora
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                const href = this.getAttribute('href');
+                if (href !== '#') {
+                    e.preventDefault();
+                    const target = document.querySelector(href);
+                    if (target) {
+                        target.scrollIntoView({
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Fechar menu ao clicar em um link
+        navMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navMenu.classList.remove('active');
             });
         });
     </script>
 </body>
 </html>
-
