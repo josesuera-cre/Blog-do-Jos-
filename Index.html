@@ -449,6 +449,25 @@
             background-color: var(--hover-color);
         }
 
+        .comments-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.7rem 1rem;
+            background-color: transparent;
+            color: var(--secondary-color);
+            border: 2px solid var(--secondary-color);
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.9rem;
+        }
+
+        .comments-toggle.open {
+            background-color: var(--secondary-color);
+            color: #fff;
+        }
+
         .like-btn {
             background-color: transparent;
             color: var(--secondary-color);
@@ -551,6 +570,12 @@
             margin-top: 1.5rem;
             padding-top: 1.5rem;
             border-top: 1px solid var(--border-color);
+            /* por padrão os comentários ficam retraídos; use a classe .show para exibir */
+            display: none;
+        }
+
+        .post-comments.show {
+            display: block;
         }
 
         .comments-section h4 {
@@ -902,6 +927,9 @@
                         <button type="button" class="read-more">
                             <i class="fas fa-book"></i> Ler mais
                         </button>
+                        <button type="button" class="comments-toggle" onclick="toggleComments(this)">
+                            <i class="fas fa-comment"></i> Comentários (<span class="comment-count">2</span>)
+                        </button>
                         <div style="position: relative;">
                             <button type="button" class="share-btn" onclick="toggleShare(this)">
                                 <i class="fas fa-share-alt"></i> Compartilhar
@@ -944,6 +972,30 @@
                         </div>
                     </div>
                 </div>
+                <div class="post-comments">
+                    <div class="comments-section">
+                        <h4>💬 Comentários (<span class="comment-count">0</span>)</h4>
+                        <form class="comment-form" onsubmit="addComment(event, this)">
+                            <input type="text" placeholder="Seu nome" class="comment-name" required>
+                            <input type="email" placeholder="Seu email (não será publicado)" class="comment-email" required>
+                            <textarea placeholder="Seu comentário..." rows="3" class="comment-text" required></textarea>
+                            <button type="submit" class="comment-submit">📤 Enviar Comentário</button>
+                        </form>
+                        <ul class="comments-list"></ul>
+                    </div>
+                </div>
+                <div class="post-comments">
+                    <div class="comments-section">
+                        <h4>💬 Comentários (<span class="comment-count">0</span>)</h4>
+                        <form class="comment-form" onsubmit="addComment(event, this)">
+                            <input type="text" placeholder="Seu nome" class="comment-name" required>
+                            <input type="email" placeholder="Seu email (não será publicado)" class="comment-email" required>
+                            <textarea placeholder="Seu comentário..." rows="3" class="comment-text" required></textarea>
+                            <button type="submit" class="comment-submit">📤 Enviar Comentário</button>
+                        </form>
+                        <ul class="comments-list"></ul>
+                    </div>
+                </div>
             </article>
 
             <article class="post-card" data-category="diário">
@@ -967,6 +1019,9 @@
                     <button type="button" class="read-more">
                         <i class="fas fa-book"></i> Ler mais
                     </button>
+                        <button type="button" class="comments-toggle" onclick="toggleComments(this)">
+                            <i class="fas fa-comment"></i> Comentários (<span class="comment-count">0</span>)
+                        </button>
                     <div style="position: relative;">
                         <button type="button" class="share-btn" onclick="toggleShare(this)">
                             <i class="fas fa-share-alt"></i> Compartilhar
@@ -1008,6 +1063,9 @@
                     <button type="button" class="read-more">
                         <i class="fas fa-book"></i> Ler mais
                     </button>
+                        <button type="button" class="comments-toggle" onclick="toggleComments(this)">
+                            <i class="fas fa-comment"></i> Comentários (<span class="comment-count">0</span>)
+                        </button>
                     <div style="position: relative;">
                         <button type="button" class="share-btn" onclick="toggleShare(this)">
                             <i class="fas fa-share-alt"></i> Compartilhar
@@ -1285,6 +1343,22 @@
         });
 
         // Compartilhamento
+        function toggleComments(button) {
+            const article = button.closest('article');
+            if (!article) return;
+            const postComments = article.querySelector('.post-comments');
+            if (!postComments) return;
+            const isOpen = postComments.classList.toggle('show');
+            button.classList.toggle('open', isOpen);
+
+            const count = article.querySelectorAll('.comment-item').length || 0;
+            if (isOpen) {
+                button.innerHTML = '<i class="fas fa-compress"></i> Fechar comentários (<span class="comment-count">' + count + '</span>)';
+            } else {
+                button.innerHTML = '<i class="fas fa-comment"></i> Comentários (<span class="comment-count">' + count + '</span>)';
+            }
+        }
+
         function toggleShare(button) {
             const shareMenu = button.nextElementSibling;
             shareMenu.classList.toggle('show');
@@ -1339,6 +1413,17 @@
             const countSpan = section.querySelector('.comment-count');
             if (countSpan) {
                 countSpan.textContent = count;
+            }
+            // Atualizar contador no botão de comentários (se existir)
+            const article = form.closest('article');
+            if (article) {
+                const btnCount = article.querySelector('.comments-toggle .comment-count');
+                if (btnCount) btnCount.textContent = count;
+                // também atualizar texto do botão caso esteja aberto
+                const btn = article.querySelector('.comments-toggle');
+                if (btn && btn.classList.contains('open')) {
+                    btn.innerHTML = '<i class="fas fa-compress"></i> Fechar comentários (<span class="comment-count">' + count + '</span>)';
+                }
             }
 
             // Mostrar mensagem de sucesso
