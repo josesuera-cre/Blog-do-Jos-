@@ -1,1 +1,366 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Blog Pessoal</title>
+    <style>
+        :root {
+            --primary-color: #14345b;
+            --secondary-color: #b8510c;
+            --hover-color: #c45f1c;
+            --accent-color: #f5efe8;
+            --text-color: #243042;
+            --text-light: #6f7a86;
+            --bg-color: #f4efe8;
+            --card-bg: #fffdf9;
+            --border-color: rgba(20, 52, 91, 0.08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        header {
+            background: linear-gradient(135deg, #14345b 0%, #1d4f7a 55%, #c97a46 100%);
+            color: #fff;
+            padding: 2rem 1rem 3rem;
+        }
+
+        .hero {
+            max-width: 1100px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 2rem;
+            align-items: end;
+        }
+
+        .brand h1 {
+            margin: 0 0 0.75rem;
+            font-size: clamp(2.4rem, 5vw, 4.5rem);
+            line-height: 1;
+            letter-spacing: -0.03em;
+        }
+
+        .brand p {
+            margin: 0;
+            font-size: 1.1rem;
+            max-width: 40rem;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .hero-card {
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            backdrop-filter: blur(10px);
+            border-radius: 18px;
+            padding: 1.25rem;
+        }
+
+        .hero-card strong {
+            display: block;
+            font-size: 1rem;
+            margin-bottom: 0.35rem;
+        }
+
+        .hero-card span {
+            display: block;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .topbar {
+            max-width: 1100px;
+            margin: 0 auto 1.5rem;
+            padding: 0 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.92);
+            font-size: 0.95rem;
+        }
+
+        .tagline {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(255, 255, 255, 0.14);
+            border: 1px solid rgba(255, 255, 255, 0.14);
+            border-radius: 999px;
+            padding: 0.5rem 0.85rem;
+        }
+
+        .tagline::before {
+            content: '';
+            width: 0.55rem;
+            height: 0.55rem;
+            border-radius: 50%;
+            background: #ffd894;
+        }
+
+        .container {
+            max-width: 1100px;
+            margin: -1.5rem auto 0;
+            padding: 0 1rem;
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .post-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 1.25rem;
+            border-radius: 22px;
+            box-shadow: 0 18px 40px rgba(20, 52, 91, 0.08);
+            overflow: hidden;
+        }
+
+        .post-card.featured {
+            padding: 0;
+        }
+
+        .post-cover {
+            width: 100%;
+            aspect-ratio: 16 / 9;
+            object-fit: cover;
+            display: block;
+        }
+
+        .post-body {
+            padding: 1.25rem;
+        }
+
+        article h2 {
+            margin: 0;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+            line-height: 1.2;
+        }
+
+        .meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            align-items: center;
+            margin: 0.75rem 0 1rem;
+        }
+
+        .date {
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        .category {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 999px;
+            padding: 0.25rem 0.7rem;
+            background: var(--accent-color);
+            color: var(--secondary-color);
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.02em;
+            text-transform: uppercase;
+        }
+
+        .extra-content {
+            display: none;
+            margin-top: 1rem;
+            line-height: 1.6;
+        }
+
+        .extra-content.show {
+            display: block;
+        }
+
+        .read-more {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.7rem 1rem;
+            background-color: var(--secondary-color);
+            color: #fff;
+            border: 0;
+            border-radius: 999px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 700;
+        }
+
+        .read-more:hover {
+            background-color: var(--hover-color);
+        }
+
+        aside {
+            background: var(--card-bg);
+            padding: 1.5rem;
+            border-radius: 22px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 18px 40px rgba(20, 52, 91, 0.08);
+            height: fit-content;
+            position: sticky;
+            top: 1.25rem;
+        }
+
+        aside h3 {
+            margin-top: 0;
+            color: var(--primary-color);
+        }
+
+        aside p {
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .about-box {
+            background: var(--accent-color);
+            border-radius: 16px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .recipe-list {
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+
+        .recipe-list li {
+            margin-bottom: 0.4rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem;
+            background-color: var(--primary-color);
+            color: #fff;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            .hero,
+            .container {
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+                gap: 0.75rem;
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            aside {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="topbar">
+            <span class="tagline">Caderno digital de ideias, vida real e receitas</span>
+            <span>Blog pessoal</span>
+        </div>
+        <div class="hero">
+            <div class="brand">
+                <h1>Meu Blog Pessoal</h1>
+                <p>Reflexões, tecnologia, rotina e aquele tipo de receita que sempre funciona em casa.</p>
+            </div>
+            <div class="hero-card">
+                <strong>Post em destaque</strong>
+                <span>Uma receita de pudim com foto, lista de ingredientes e modo de preparo para deixar o blog com mais cara de revista digital.</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="main-content">
+            <article class="post-card featured">
+                <img class="post-cover" src="https://upload.wikimedia.org/wikipedia/commons/0/0a/Pudim_de_leite_%283544235183%29.jpg" alt="Pudim de leite caramelizado" loading="lazy">
+                <div class="post-body">
+                    <span class="category">Receita</span>
+                    <h2>Receita de pudim clássico</h2>
+                    <div class="meta-row">
+                        <time class="date" datetime="2026-06-22">22 de Junho de 2026</time>
+                    </div>
+                    <p>Hoje o blog ganhou um post com cara de comida boa: um pudim clássico, cremoso e com calda dourada. É uma receita simples, com poucos ingredientes e perfeita para um almoço de família.</p>
+                    <p class="extra-content">Ingredientes: 1 lata de leite condensado, 2 medidas da lata de leite, 3 ovos e 1 xícara de açúcar para a calda. Modo de preparo: derreta o açúcar até virar caramelo, espalhe na forma, bata os ingredientes no liquidificador, despeje na forma caramelizada e asse em banho-maria até firmar. Depois é só gelar e desenformar.</p>
+                    <button type="button" class="read-more">Ler mais</button>
+                </div>
+            </article>
+
+            <article class="post-card">
+                <h2>Minha primeira postagem no blog</h2>
+                <div class="meta-row">
+                    <span class="category">Diário</span>
+                    <time class="date" datetime="2026-06-15">15 de Junho de 2026</time>
+                </div>
+                <p>Olá! Este é o primeiro post do meu espaço na internet. Estou muito animado para começar a compartilhar minhas experiências, códigos e ideias com vocês. Sejam muito bem-vindos!</p>
+                <p class="extra-content">Aqui eu posso contar mais sobre como nasceu a ideia do blog, quais temas vou trazer e como pretendo usar este espaço para registrar minha evolução.</p>
+                <button type="button" class="read-more">Ler mais</button>
+            </article>
+
+            <article class="post-card">
+                <h2>Dicas para organizar a rotina de estudos</h2>
+                <div class="meta-row">
+                    <span class="category">Estudos</span>
+                    <time class="date" datetime="2026-06-10">10 de Junho de 2026</time>
+                </div>
+                <p>Aprender algo novo exige disciplina e foco. Hoje vou compartilhar algumas estratégias práticas que têm me ajudado a manter a consistência nos estudos, sem surtar no processo.</p>
+                <p class="extra-content">Uma boa rotina começa com metas pequenas, pausas curtas e um plano realista. O segredo é manter a constância sem tentar fazer tudo de uma vez.</p>
+                <button type="button" class="read-more">Ler mais</button>
+            </article>
+        </section>
+
+        <aside>
+            <h3>Sobre mim</h3>
+            <div class="about-box">
+                <p>Olá! Sou um entusiasta de tecnologia, conteúdo digital e também de receitas simples que rendem boas histórias.</p>
+            </div>
+            <h3>O que você encontra aqui</h3>
+            <ul class="recipe-list">
+                <li>Posts pessoais</li>
+                <li>Dicas de estudo</li>
+                <li>Receitas caseiras</li>
+            </ul>
+        </aside>
+    </main>
+
+    <footer>
+        <p>&copy; 2026 Meu Blog Pessoal. Desenvolvido com HTML, CSS e JS.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const buttons = document.querySelectorAll('.read-more');
+
+            buttons.forEach(function (button) {
+                button.addEventListener('click', function () {
+                    const article = button.closest('article');
+                    const extraContent = article.querySelector('.extra-content');
+                    const isVisible = extraContent.classList.toggle('show');
+
+                    button.textContent = isVisible ? 'Ler menos' : 'Ler mais';
+                });
+            });
+        });
+    </script>
+</body>
+</html>
 
